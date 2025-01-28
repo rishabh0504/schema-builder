@@ -58,3 +58,10 @@
     @apply bg-background text-foreground;
   }
 }
+body{
+  fontSize: 0.875rem
+}
+button{
+  
+  
+}

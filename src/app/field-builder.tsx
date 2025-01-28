@@ -1,6 +1,13 @@
 "use client";
 
-import type React from "react";
+import { FieldType, SchemaField } from "@/components/lib/types";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -11,15 +18,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import type { SchemaField, FieldType } from "./types";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+import type React from "react";
 
 interface FieldBuilderProps {
   field: SchemaField;
@@ -59,9 +59,11 @@ export function FieldBuilder({ field, onUpdate, onRemove }: FieldBuilderProps) {
   return (
     <Accordion type="single" collapsible className="w-full">
       <AccordionItem value="item-1">
-        <AccordionTrigger>{field.name || "New Field"}</AccordionTrigger>
-        <AccordionContent>
-          <div className="space-y-4 border p-4 rounded-md">
+        <AccordionTrigger className="text-sm">
+          {field.name || "New Field"}
+        </AccordionTrigger>
+        <AccordionContent className="bg-white">
+          <div className="space-y-4 border p-4 rounded-md bg-gray-100">
             <div className="flex space-x-4">
               <div className="flex-1">
                 <Label htmlFor="name">Field Name</Label>

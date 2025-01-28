@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import { Schema } from "@/components/lib/types";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useState } from "react";
 import ReactJson from "react-json-view";
-import type { Schema } from "./types";
 
 interface JSONOutputProps {
   schema: Schema;

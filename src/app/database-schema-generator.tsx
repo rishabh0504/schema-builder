@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -10,8 +10,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import type { Schema, SchemaField } from "@/lib/types";
+import type { Schema } from "@/lib/types";
+import { useState } from "react";
 
 interface DatabaseSchemaGeneratorProps {
   jsonSchema: Schema;
@@ -46,49 +46,61 @@ export function DatabaseSchemaGenerator({
   const generatePostgresSchema = (schema: Schema): string => {
     let result = "";
     let foreignKeys: string[] = [];
-    Object.entries(schema.properties).forEach(([name, prop]: [string, any]) => {
-      const { columnDef, relationshipDefs } = getPostgresColumnAndRelationship(
-        name,
-        prop
+    if (schema.properties) {
+      Object.entries(schema.properties).forEach(
+        ([name, prop]: [string, any]) => {
+          const { columnDef, relationshipDefs } =
+            getPostgresColumnAndRelationship(name, prop);
+          result += columnDef;
+          foreignKeys = [...foreignKeys, ...relationshipDefs];
+        }
       );
-      result += columnDef;
-      foreignKeys = [...foreignKeys, ...relationshipDefs];
-    });
-    return `CREATE TABLE ${
-      schema.title || "table_name"
-    } (\n${result}${foreignKeys.join(",\n")}\n);`;
+      return `CREATE TABLE ${
+        schema.title || "table_name"
+      } (\n${result}${foreignKeys.join(",\n")}\n);`;
+    }
+    return "";
   };
 
   const generateMySQLSchema = (schema: Schema): string => {
     let result = "";
     let foreignKeys: string[] = [];
-    Object.entries(schema.properties).forEach(([name, prop]: [string, any]) => {
-      const { columnDef, relationshipDefs } = getMySQLColumnAndRelationship(
-        name,
-        prop
+    if (schema.properties) {
+      Object.entries(schema.properties).forEach(
+        ([name, prop]: [string, any]) => {
+          const { columnDef, relationshipDefs } = getMySQLColumnAndRelationship(
+            name,
+            prop
+          );
+          result += columnDef;
+          foreignKeys = [...foreignKeys, ...relationshipDefs];
+        }
       );
-      result += columnDef;
-      foreignKeys = [...foreignKeys, ...relationshipDefs];
-    });
-    return `CREATE TABLE ${
-      schema.title || "table_name"
-    } (\n${result}${foreignKeys.join(",\n")}\n);`;
+      return `CREATE TABLE ${
+        schema.title || "table_name"
+      } (\n${result}${foreignKeys.join(",\n")}\n);`;
+    }
+    return "";
   };
 
   const generateSQLiteSchema = (schema: Schema): string => {
     let result = "";
     let foreignKeys: string[] = [];
-    Object.entries(schema.properties).forEach(([name, prop]: [string, any]) => {
-      const { columnDef, relationshipDefs } = getSQLiteColumnAndRelationship(
-        name,
-        prop
+
+    if (schema.properties) {
+      Object.entries(schema.properties).forEach(
+        ([name, prop]: [string, any]) => {
+          const { columnDef, relationshipDefs } =
+            getSQLiteColumnAndRelationship(name, prop);
+          result += columnDef;
+          foreignKeys = [...foreignKeys, ...relationshipDefs];
+        }
       );
-      result += columnDef;
-      foreignKeys = [...foreignKeys, ...relationshipDefs];
-    });
-    return `CREATE TABLE ${
-      schema.title || "table_name"
-    } (\n${result}${foreignKeys.join(",\n")}\n);`;
+      return `CREATE TABLE ${
+        schema.title || "table_name"
+      } (\n${result}${foreignKeys.join(",\n")}\n);`;
+    }
+    return "";
   };
 
   const getPostgresColumnAndRelationship = (

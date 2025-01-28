@@ -20,7 +20,8 @@ export interface SchemaField {
 }
 
 export interface Schema {
-  type: "object";
-  properties: Record<string, any>;
-  required: string[];
+  title?: string;
+  type?: "object";
+  properties?: Record<string, any>;
+  required?: string[];
 }

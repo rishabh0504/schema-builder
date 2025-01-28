@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import { SchemaField } from "@/components/lib/types";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { useState } from "react";
 import { parseSchema } from "./utils";
-import type { SchemaField } from "./types";
 
 interface SchemaImporterProps {
   onImport: (fields: SchemaField[]) => void;

@@ -1,4 +1,4 @@
-import type { FieldType, Schema, SchemaField } from "./types";
+import { FieldType, Schema, SchemaField } from "@/components/lib/types";
 
 export function generateSchema(fields: SchemaField[]): Schema {
   const schema: Schema = {
@@ -8,9 +8,11 @@ export function generateSchema(fields: SchemaField[]): Schema {
   };
 
   fields.forEach((field) => {
-    schema.properties[field.name] = generateFieldSchema(field);
-    if (field.required) {
-      schema.required.push(field.name);
+    if (schema.properties && schema.required && schema.properties[field.name]) {
+      schema.properties[field.name] = generateFieldSchema(field);
+      if (field.required) {
+        schema.required.push(field.name);
+      }
     }
   });
 
