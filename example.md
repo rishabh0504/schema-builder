@@ -389,3 +389,46 @@ describe("🧪 CrudComponent Test Suite", () => {
 
 
 ```
+
+
+```
+
+import React from "react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { SmartInput } from "../components/SmartInput";
+
+jest.useFakeTimers();
+global.fetch = jest.fn();
+
+afterEach(() => {
+  jest.clearAllMocks();
+});
+
+test("🔥 POST API is triggered after debounce on typing", async () => {
+  (fetch as jest.Mock).mockResolvedValueOnce({
+    ok: true,
+    json: async () => ({ message: "Received" }),
+    headers: { get: () => "application/json" },
+  });
+
+  render(<SmartInput />);
+  const input = screen.getByPlaceholderText("Type to search...");
+
+  fireEvent.change(input, { target: { value: "rishabh" } });
+
+  // simulate debounce delay
+  jest.advanceTimersByTime(500);
+
+  await waitFor(() => {
+    expect(fetch).toHaveBeenCalledWith(
+      "/api/input",
+      expect.objectContaining({
+        method: "POST",
+        body: JSON.stringify({ query: "rishabh" }),
+      })
+    );
+    expect(screen.getByText(/Received/)).toBeInTheDocument();
+  });
+});
+
+```
